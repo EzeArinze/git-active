@@ -4,7 +4,7 @@ import { authClient } from "../auth-client"
 
 export function useAuth() {
   const router = useRouter()
-  const { data: session, isPending, error, refetch } = authClient.useSession()
+  const { data: session, isPending, error} = authClient.useSession()
 
   const user = session?.user
 
@@ -19,14 +19,12 @@ export function useAuth() {
   return {
     user: data,
     error,
-    refetch,
     isLoading: isPending,
     signOut: async () => {
       await authClient.signOut({
         fetchOptions: {
           onSuccess: () => {
             router.push("/")
-            // window.location.href = "/"
           },
         },
       })

@@ -24,7 +24,7 @@ function Login() {
   return (
     <section className="flex flex-col items-center justify-center">
       <div className="mb-4 text-center">
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-2">
           <Logo />
         </div>
 
@@ -36,11 +36,11 @@ function Login() {
         </p>
       </div>
 
-      <div className="border-outline/60 w-97.5 space-y-2 rounded-xl border bg-white p-6 text-center shadow-sm">
+      <div className="border-outline/60 w-full max-w-[390px] space-y-2 rounded-xl border bg-background p-6 text-center shadow-sm">
         <button
           disabled={loggingIn}
           onClick={() => handleLogin("github")}
-          className="w-full rounded-md bg-primary px-4 py-3 text-white transition hover:bg-primary/70"
+          className="w-full rounded-md bg-primary px-4 py-3 text-primary-foreground transition hover:bg-primary/70"
         >
           {loggingIn ? (
             <div className="flex items-center gap-2 cursor-not-allowed px-4 py-3">
@@ -54,7 +54,7 @@ function Login() {
           )}
         </button>
 
-        <p className="text-on-surface-variant text-xs leading-relaxed font-medium">
+        <p className="text-on-surface-variant text-xs leading-relaxed font-medium text-muted-foreground">
           By continuing, you agree to Sahara’s Terms of Service and Privacy
           Policy. We only request read access to your public and private
           repository metadata.
