@@ -4,6 +4,8 @@ import { useTransition } from "react"
 import Logo from "../logo"
 import { Loader } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
+import Link from "next/link"
+// import { Button } from "../ui/button"
 
 type auth_provider = "github" | "google"
 
@@ -40,7 +42,16 @@ function Login() {
           onClick={() => handleLogin("github")}
           className="w-full rounded-md bg-primary px-4 py-3 text-white transition hover:bg-primary/70"
         >
-          <Loader className="size-4 animate-spin" /> Continue with GitHub
+          {loggingIn ? (
+            <div className="flex items-center gap-2 cursor-not-allowed px-4 py-3">
+              <Loader className="size-4 animate-spin" />
+              Signing in...
+            </div>
+          ) : (
+            <span className="px-4 py-3">
+              Continue with GitHub
+            </span>
+          )}
         </button>
 
         <p className="text-on-surface-variant text-xs leading-relaxed font-medium">
@@ -52,17 +63,17 @@ function Login() {
 
       <footer className="mt-12 flex flex-col items-center gap-6">
         <div className="flex items-center gap-8 text-sm font-medium text-primary">
-          <a className="transition-colors hover:text-primary/90" href="/#">
+          <Link className="transition-colors hover:text-primary/90" href="/#">
             Documentation
-          </a>
+          </Link>
           <span className="bg-outline-variant h-1 w-1 rounded-full"></span>
-          <a className="transition-colors hover:text-primary/90" href="/#">
+          <Link className="transition-colors hover:text-primary/90" href="/#">
             Support
-          </a>
+          </Link>
           <span className="bg-outline-variant h-1 w-1 rounded-full"></span>
-          <a className="transition-colors hover:text-primary/90" href="/#">
+          <Link className="transition-colors hover:text-primary/90" href="/#">
             Security
-          </a>
+          </Link>
         </div>
       </footer>
 
