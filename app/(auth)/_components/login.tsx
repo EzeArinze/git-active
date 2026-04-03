@@ -1,7 +1,7 @@
 "use client"
 
 import { useTransition } from "react"
-import Logo from "../logo"
+import Logo from "../../../components/logo"
 import { Loader } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
 import Link from "next/link"
@@ -16,7 +16,7 @@ function Login() {
     startLoggingIn(async () => {
       authClient.signIn.social({
         provider: method,
-        callbackURL: "/",
+        callbackURL: "/dashboard",
       })
     })
   }
@@ -55,7 +55,7 @@ function Login() {
         </button>
 
         <p className="text-on-surface-variant text-xs leading-relaxed font-medium text-muted-foreground">
-          By continuing, you agree to Sahara’s Terms of Service and Privacy
+          By continuing, you agree to Git Active’s Terms of Service and Privacy
           Policy. We only request read access to your public and private
           repository metadata.
         </p>

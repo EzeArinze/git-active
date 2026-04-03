@@ -1,4 +1,4 @@
-import Login from "@/components/auth-components/login"
+import Login from "@/app/(auth)/_components/login"
 import { redirectIfAuthenticated } from "@/lib/server/auth-guard/redirect-if-authenticated"
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
