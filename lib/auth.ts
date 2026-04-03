@@ -7,11 +7,23 @@ export const auth = betterAuth({
   baseURL: process.env.ORIGIN,
   secret: process.env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(db, { provider: "pg" }),
-  emailAndPassword: { enabled: true },
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    },
+  },
+  rateLimit:{
+    enabled: true,
+    window: 10 * 60,
+    max: 10,
+    // storage:"database",
+    // modelName:"rateLimit"
+  },
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 15 * 60,
     },
   },
   plugins: [nextCookies()],

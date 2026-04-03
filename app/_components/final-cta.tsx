@@ -4,8 +4,9 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { IconBrandGithub } from "@tabler/icons-react";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -43,10 +44,10 @@ export function FinalCTA() {
           <p className="mt-6 text-lg text-background/70 max-w-lg">
             Join thousands of developers turning noisy repositories into clear daily intelligence.
           </p>
-          <Button size="lg" className="mt-10 h-14 rounded-2xl bg-primary px-8 text-base font-medium text-primary-foreground shadow-lg hover:bg-primary/90 hover:scale-105 transition-all duration-300">
+          <Link href={"/login"} className={buttonVariants({size:"lg", className:"mt-10 h-14 rounded-2xl bg-primary px-8 text-base font-medium text-primary-foreground shadow-lg hover:bg-primary/90 hover:scale-105 transition-all duration-300"})}>
             <IconBrandGithub fill="currentColor" strokeWidth={0} className="mr-3 size-5" />
             Continue with GitHub
-          </Button>
+          </Link>
         </div>
       </div>
     </section>

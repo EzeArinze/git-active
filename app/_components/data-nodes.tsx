@@ -5,8 +5,7 @@ import * as THREE from "three";
 
 export function DataNodes() {
   const group = useRef<THREE.Group>(null);
-  
-  // Create some orbiting nodes to represent repos/events using a pseudo-random function for pure render
+
   const nodes = useMemo(() => {
     const pseudoRandom = (seed: number) => {
       const x = Math.sin(seed * 9999) * 10000;
@@ -16,66 +15,92 @@ export function DataNodes() {
     return Array.from({ length: 14 }).map((_, i) => {
       const angle = (i / 14) * Math.PI * 2;
       const radius = 2.5 + pseudoRandom(i + 1) * 2;
+
       return {
-        position: [Math.cos(angle) * radius, (pseudoRandom(i + 2) - 0.5) * 3, Math.sin(angle) * radius],
+        position: [
+          Math.cos(angle) * radius,
+          (pseudoRandom(i + 2) - 0.5) * 3,
+          Math.sin(angle) * radius
+        ],
         speed: 0.2 + pseudoRandom(i + 3) * 0.5,
         offset: pseudoRandom(i + 4) * Math.PI * 2,
-        color: i % 3 === 0 ? "#10b981" : (i % 2 === 0 ? "#3b82f6" : "#8b5cf6")
+        color:
+          i % 3 === 0
+            ? "#10b981"
+            : i % 2 === 0
+            ? "#3b82f6"
+            : "#8b5cf6"
       };
     });
   }, []);
 
   const time = useRef(0);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     time.current += delta;
-    if (group.current) {
-      group.current.rotation.y += 0.001;
-      group.current.children.forEach((child, i) => {
-        // Simple oscillation effect
-        const node = nodes[i - 1]; // roughly match node data starting after core
+
+    if (!group.current) return;
+
+    // rotate entire system
+    group.current.rotation.y += 0.001;
+
+    // safely update only node groups
+    group.current.children.forEach((child) => {
+      const nodeIndex = child.userData?.nodeIndex;
+
+      if (child.userData?.isNode && nodeIndex !== undefined) {
+        const node = nodes[nodeIndex];
+
         if (node) {
-          child.position.y += Math.sin(time.current * node.speed + node.offset) * 0.005;
+          child.position.y +=
+            Math.sin(time.current * node.speed + node.offset) * 0.005;
         }
-      });
-    }
+      }
+    });
   });
 
   return (
     <group ref={group}>
-      {/* Central Core: The Intelligence Engine */}
+      {/* Central Core */}
       <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
         <Sphere args={[1.2, 32, 32]}>
-          <MeshDistortMaterial 
-            color="#0ea5e9" 
+          <MeshDistortMaterial
+            color="#0ea5e9"
             emissive="#0284c7"
             emissiveIntensity={0.5}
-            envMapIntensity={1} 
-            clearcoat={1} 
-            clearcoatRoughness={0.1} 
-            distort={0.4} 
-            speed={2} 
-            wireframe={true}
+            envMapIntensity={1}
+            clearcoat={1}
+            clearcoatRoughness={0.1}
+            distort={0.4}
+            speed={2}
+            wireframe
           />
         </Sphere>
       </Float>
 
-      {/* Outer Nodes: Commits, Repos, Issues */}
+      {/* Nodes */}
       {nodes.map((node, i) => (
-        <group key={i} position={node.position as [number, number, number]}>
+        <group
+          key={i}
+          position={node.position as [number, number, number]}
+          userData={{ isNode: true, nodeIndex: i }} // ✅ important
+        >
           <Float speed={3} rotationIntensity={1} floatIntensity={2}>
             <Sphere args={[0.15, 16, 16]}>
-              <meshStandardMaterial 
-                color={node.color} 
+              <meshStandardMaterial
+                color={node.color}
                 emissive={node.color}
                 emissiveIntensity={0.8}
-                wireframe 
+                wireframe
               />
             </Sphere>
           </Float>
-          {/* Connection line back to center */}
+
           <Line
-            points={[[0, 0, 0], [-node.position[0], -node.position[1], -node.position[2]]]}
+            points={[
+              [0, 0, 0],
+              [-node.position[0], -node.position[1], -node.position[2]]
+            ]}
             color={node.color}
             opacity={0.15}
             transparent

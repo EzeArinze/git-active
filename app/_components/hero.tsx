@@ -1,12 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { FuturisticMonitor } from "./futuristic-Monitor";
 import { IconBrandGithub } from "@tabler/icons-react"
+import Link from "next/link";
 
 export function HeroSection() {
   const container = useRef<HTMLElement>(null);
@@ -83,7 +84,7 @@ export function HeroSection() {
           </h1>
 
           {/* Subheadline */}
-          <p className="subhead mt-2 text-base sm:text-lg leading-relaxed text-muted-foreground max-w-xl opacity-0 translate-y-10">
+          <p className="subhead mx-auto mt-2 text-base sm:text-lg lg:text-left leading-relaxed text-muted-foreground max-w-xl opacity-0 translate-y-10">
             Git Active shows you what actually matters across your repositories
             — commits, PRs, and issues, summarized into actionable insights.
           </p>
@@ -91,22 +92,25 @@ export function HeroSection() {
           {/* CTA */}
           <div className="mt-4 flex flex-col sm:flex-row items-center gap-4 w-full justify-center lg:justify-start">
 
-            <Button
-              size="lg"
-              className="cta-btn h-12 w-full sm:w-auto rounded-xl bg-primary px-6 text-[0.95rem] font-medium text-primary-foreground shadow-sm hover:bg-primary/90 opacity-0 translate-y-10"
+            <Link
+              href={"/login"}
+              className={buttonVariants({size:"lg",className:"cta-btn h-12 w-full sm:w-auto rounded-xl bg-primary px-6 text-[0.95rem] font-medium text-primary-foreground shadow-sm hover:bg-primary/90 opacity-0 translate-y-10"})}
             >
               <IconBrandGithub fill="currentColor" strokeWidth={0} className="mr-2 size-5" />
               Continue with GitHub
-            </Button>
+            </Link>
 
-            <Button
-              variant="outline"
-              size="lg"
-              className="cta-btn h-12 w-full sm:w-auto rounded-xl px-6 text-[0.95rem] font-medium shadow-sm hover:bg-secondary opacity-0 translate-y-10"
+            <Link
+              href={"/#"}
+              className={buttonVariants({
+                variant:"outline",
+                size:"lg",
+                className:"cta-btn h-12 w-full sm:w-auto rounded-xl px-6 text-[0.95rem] font-medium shadow-sm hover:bg-secondary opacity-0 translate-y-10"
+              })}
             >
               <Play className="mr-2 size-4 text-primary" />
               See how it works
-            </Button>
+            </Link>
 
           </div>
         </div>
