@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
-import { GitBranch } from "lucide-react";
+import { IconBrandGithub } from "@tabler/icons-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -44,7 +44,7 @@ export function FinalCTA() {
             Join thousands of developers turning noisy repositories into clear daily intelligence.
           </p>
           <Button size="lg" className="mt-10 h-14 rounded-2xl bg-primary px-8 text-base font-medium text-primary-foreground shadow-lg hover:bg-primary/90 hover:scale-105 transition-all duration-300">
-            <GitBranch fill="currentColor" strokeWidth={0} className="mr-3 size-5" />
+            <IconBrandGithub fill="currentColor" strokeWidth={0} className="mr-3 size-5" />
             Continue with GitHub
           </Button>
         </div>

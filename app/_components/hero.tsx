@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { GitBranch, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { FuturisticMonitor } from "./futuristic-Monitor";
+import { IconBrandGithub } from "@tabler/icons-react"
 
 export function HeroSection() {
   const container = useRef<HTMLElement>(null);
@@ -94,7 +95,7 @@ export function HeroSection() {
               size="lg"
               className="cta-btn h-12 w-full sm:w-auto rounded-xl bg-primary px-6 text-[0.95rem] font-medium text-primary-foreground shadow-sm hover:bg-primary/90 opacity-0 translate-y-10"
             >
-              <GitBranch fill="currentColor" strokeWidth={0} className="mr-2 size-5" />
+              <IconBrandGithub fill="currentColor" strokeWidth={0} className="mr-2 size-5" />
               Continue with GitHub
             </Button>
 

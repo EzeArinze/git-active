@@ -1,8 +1,8 @@
 "use client"
 
 import { useAuth } from "@/lib/client/use-auth"
-import Logo from "./logo"
-import { Button } from "./ui/button"
+import Logo from "../../components/logo"
+import { Button } from "../../components/ui/button"
 import { LogOut } from "lucide-react"
 
 function Header() {

@@ -1,22 +1,34 @@
 "use client"
 
-import { useTransition } from "react"
+import { useState, useTransition } from "react"
 import Logo from "../../../components/logo"
 import { Loader } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
 import Link from "next/link"
-// import { Button } from "../ui/button"
+import { IconBrandGithub } from "@tabler/icons-react"
 
 type auth_provider = "github" | "google"
 
 function Login() {
   const [loggingIn, startLoggingIn] = useTransition()
+  const [isSigning,setIsSigning] = useState(false)
 
   function handleLogin(method: auth_provider) {
     startLoggingIn(async () => {
       authClient.signIn.social({
         provider: method,
         callbackURL: "/dashboard",
+      },{
+        onRequest:()=>{
+          setIsSigning(true)
+        },
+        onSuccess:()=>{
+          setIsSigning(false)
+        },
+        onError:({error})=>{
+          setIsSigning(false)
+          console.log(error.message)
+        }
       })
     })
   }
@@ -38,19 +50,20 @@ function Login() {
 
       <div className="border-outline/60 w-full max-w-[390px] space-y-2 rounded-xl border bg-background p-6 text-center shadow-sm">
         <button
-          disabled={loggingIn}
+          disabled={loggingIn || isSigning}
           onClick={() => handleLogin("github")}
-          className="w-full rounded-md bg-primary px-4 py-3 text-primary-foreground transition hover:bg-primary/70"
+          className="w-full rounded-md bg-primary px-4 py-3 text-primary-foreground transition hover:bg-primary/90 cursor-pointer"
         >
-          {loggingIn ? (
-            <div className="flex items-center gap-2 cursor-not-allowed px-4 py-3">
+          {loggingIn || isSigning ? (
+            <div className="flex items-center justify-center gap-2 cursor-not-allowed px-4 py-1">
               <Loader className="size-4 animate-spin" />
               Signing in...
             </div>
           ) : (
-            <span className="px-4 py-3">
+            <div className="flex items-center justify-center gap-2 px-4 py-1">
+              <IconBrandGithub fill="currentColor" strokeWidth={0} className="size-5" />
               Continue with GitHub
-            </span>
+            </div>
           )}
         </button>
 
