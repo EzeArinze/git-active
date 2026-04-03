@@ -1,6 +1,6 @@
-# Repo Intelligence
+# Git Active
 
-Repo Intelligence is a futuristic SaaS platform that provides actionable, intelligent insights for your GitHub repositories. Built with Next.js, Octokit for GitHub API integration, Neon for database, Better-auth for authentication, Drizzle for ORM, React Three Fiber for interactive 3D visualizations, GSAP for dynamic scroll-based animations, and Tailwind CSS + shadcn/ui.
+Git Active is a futuristic SaaS platform that provides actionable, intelligent insights for your GitHub repositories. Built with Next.js, Octokit for GitHub API integration, Neon for database, Better-auth for authentication, Drizzle for ORM, React Three Fiber for interactive 3D visualizations, GSAP for dynamic scroll-based animations, and Tailwind CSS + shadcn/ui.
 
 ## Tech Stack
 
@@ -27,7 +27,7 @@ Repo Intelligence is a futuristic SaaS platform that provides actionable, intell
 
    ```bash
    git clone <repository-url>
-   cd repo-intelligence
+   cd git-active
    ```
 
 2. Install dependencies:
