@@ -14,35 +14,42 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { TerminalSquareIcon, Settings2Icon, LifeBuoyIcon, SendIcon } from "lucide-react"
+import {
+  TerminalSquareIcon,
+  Settings2Icon,
+  LifeBuoyIcon,
+  SendIcon,
+  LayoutDashboard,
+} from "lucide-react"
 import Logo from "@/components/logo"
+import { useAuth } from "@/lib/client/use-auth"
+import { Activity } from "react"
 
 const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    image: "/avatars/shadcn.jpg",
   },
   navMain: [
     {
-      title: "Playground",
+      title: "Dashboard",
       url: "#",
-      icon: (
-        <TerminalSquareIcon
-        />
-      ),
+      icon: <LayoutDashboard />,
+      isActive: true,
+    },
+    {
+      title: "Repos",
+      url: "#",
+      icon: <TerminalSquareIcon />,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Repositories",
           url: "#",
         },
         {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
+          title: "Import",
           url: "#",
         },
       ],
@@ -50,51 +57,24 @@ const data = {
     {
       title: "Settings",
       url: "#",
-      icon: (
-        <Settings2Icon
-        />
-      ),
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+      icon: <Settings2Icon />,
     },
   ],
   navSecondary: [
     {
       title: "Support",
       url: "#",
-      icon: (
-        <LifeBuoyIcon
-        />
-      ),
+      icon: <LifeBuoyIcon />,
     },
     {
       title: "Feedback",
       url: "#",
-      icon: (
-        <SendIcon
-        />
-      ),
+      icon: <SendIcon />,
     },
   ],
-  
 }
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user, isLoading, signOut } = useAuth()
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -104,12 +84,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" render={<a href="#" />}>
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <Logo className="size-4"/>
-              </div>
+            <SidebarMenuButton
+              size="lg"
+              render={<a href="/dashboard" />}
+              className="space-x-1"
+            >
+              <Logo className="aspect-square size-8 rounded-lg text-sidebar-primary-foreground" />
+
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium tracking-tight">GitActive</span>
+                <span className="truncate font-medium tracking-tight">
+                  GitActive
+                </span>
                 <span className="truncate text-xs">Enterprise</span>
               </div>
             </SidebarMenuButton>
@@ -118,11 +103,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+
+         {user && !isLoading ?  <NavUser user={user} signOut={signOut} /> :null}
+
       </SidebarFooter>
     </Sidebar>
   )

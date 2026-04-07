@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation"
-import { getSession } from "./session"
+import { getServerSession } from "./session"
 
 export async function redirectIfAuthenticated(redirectTo = "/") {
-  const session = await getSession()
+  const session = await getServerSession()
 
   if (session?.user?.id) {
     redirect(redirectTo)
