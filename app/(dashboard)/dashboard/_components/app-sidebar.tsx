@@ -23,7 +23,6 @@ import {
 } from "lucide-react"
 import Logo from "@/components/logo"
 import { useAuth } from "@/lib/client/use-auth"
-import { Activity } from "react"
 
 const data = {
   user: {
@@ -34,29 +33,29 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: <LayoutDashboard />,
       isActive: true,
     },
     {
-      title: "Repos",
+      title: "Repositories",
       url: "#",
       icon: <TerminalSquareIcon />,
       isActive: true,
       items: [
         {
-          title: "Repositories",
-          url: "#",
+          title: "Repos",
+          url: "/dashboard/repositories/repos",
         },
         {
           title: "Import",
-          url: "#",
+          url: "/dashboard/repositories/import",
         },
       ],
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/dashboard/settings",
       icon: <Settings2Icon />,
     },
   ],
@@ -106,9 +105,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-
-         {user && !isLoading ?  <NavUser user={user} signOut={signOut} /> :null}
-
+        {user && !isLoading ? <NavUser user={user} signOut={signOut} /> : null}
       </SidebarFooter>
     </Sidebar>
   )
