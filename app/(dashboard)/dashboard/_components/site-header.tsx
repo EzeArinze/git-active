@@ -1,6 +1,6 @@
 "use client"
 
-import { SearchForm } from "@/app/dashboard/_components/search-form"
+import { SearchForm } from "./search-form"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -26,8 +26,7 @@ export function SiteHeader() {
           size="icon"
           onClick={toggleSidebar}
         >
-          <PanelLeftIcon
-          />
+          <PanelLeftIcon />
         </Button>
         <Separator
           orientation="vertical"

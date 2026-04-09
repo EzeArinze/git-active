@@ -50,7 +50,7 @@ function ImportReposRoute() {
       <div className="max-w-3xl">
         <h1 className="text-3xl font-semibold">Connect Your Projects</h1>
         <p className="mt-2 text-muted-foreground">
-          Select the repositories you&apos;d like Sahara to monitor for
+          Select the repositories you&apos;d like Git to monitor for
           intelligence. We&apos;ll analyze your commit history and patterns to
           provide actionable insights.
         </p>
@@ -112,7 +112,7 @@ function ImportReposRoute() {
         </div>
 
         {/* Footer */}
-        <div className="flex flex-col gap-4 border-t p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 border-t bg-accent-foreground/5 p-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
             You can change these selections later in your settings.
           </p>
@@ -129,13 +129,13 @@ function ImportReposRoute() {
       </div>
 
       {/* Bottom Features */}
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mx-auto mt-8 grid max-w-6xl gap-6 sm:grid-cols-2 md:grid-cols-3">
         <div className="space-y-2">
           <Shield className="text-orange-500" />
           <h3 className="font-medium">Secure Access</h3>
-          <p className="text-sm text-muted-foreground">
-            Sahara uses read-only access to analyze code patterns without
-            modifying your sources.
+          <p className="line-clamp-3 text-sm text-muted-foreground">
+            Git uses read-only access to analyze code patterns without modifying
+            your sources.
           </p>
         </div>
 
@@ -160,7 +160,7 @@ function ImportReposRoute() {
 
       {/* Footer note */}
       <div className="text-center text-xs text-muted-foreground">
-        SAHARA INTELLIGENCE © 2024 • BUILT FOR CLARITY
+        Git Active © 2024 • BUILT FOR CLARITY
       </div>
     </div>
   )

@@ -1,10 +1,6 @@
 "use client"
 
 import * as React from "react"
-
-import { NavMain } from "@/app/dashboard/_components/nav-main"
-import { NavSecondary } from "@/app/dashboard/_components/nav-secondary"
-import { NavUser } from "@/app/dashboard/_components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -23,6 +19,9 @@ import {
 } from "lucide-react"
 import Logo from "@/components/logo"
 import { useAuth } from "@/lib/client/use-auth"
+import { NavMain } from "./nav-main"
+import { NavSecondary } from "./nav-secondary"
+import { NavUser } from "./nav-user"
 
 const data = {
   user: {
@@ -49,7 +48,7 @@ const data = {
         },
         {
           title: "Import",
-          url: "/dashboard/repositories/import",
+          url: "/dashboard/repositories/import-repos",
         },
       ],
     },
@@ -72,6 +71,7 @@ const data = {
     },
   ],
 }
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, isLoading, signOut } = useAuth()
   return (
