@@ -3,7 +3,7 @@ import { AlertTriangle, Bell, Inbox } from "lucide-react"
 
 function NotificationStats() {
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
       <Card>
         <CardContent className="flex items-center gap-4 p-4">
           <div className="rounded-md bg-muted p-2">

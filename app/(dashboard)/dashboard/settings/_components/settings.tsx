@@ -18,17 +18,21 @@ export default function Settings() {
   const [freq, setFreq] = useState("daily")
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="p-4 sm:p-6 md:p-8">
       <SettingsHeader />
 
-      <div className="flex gap-12">
-        <SettingsNav active={active} setActive={setActive} />
+      <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+        {/* Sub-sidebar – becomes horizontal scroll on mobile */}
+        <div className="w-full md:w-56">
+          <SettingsNav active={active} setActive={setActive} />
+        </div>
 
-        {/* RIGHT CONTENT */}
+        {/* Right content – full width on mobile */}
         <div className="flex-1">
-          <section className="mb-12">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-2xl font-semibold tracking-tight">
+          {/* Repositories section */}
+          <section className="mb-10">
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
                 Imported Repositories
               </h2>
               <Button className="rounded-lg bg-orange-600 text-white hover:bg-orange-700">
@@ -36,7 +40,7 @@ export default function Settings() {
               </Button>
             </div>
 
-            <div className="grid max-w-2xl grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <SettingsRepoCard
                 name="sahara-ui-kit"
                 time="Last synced 2h ago"
@@ -50,11 +54,10 @@ export default function Settings() {
           </section>
 
           {/* Notification Preferences */}
-          <section className="mb-12 max-w-2xl">
-            <h2 className="mb-5 text-2xl font-semibold tracking-tight">
+          <section className="mb-10">
+            <h2 className="mb-5 text-xl font-semibold tracking-tight sm:text-2xl">
               Notification Preferences
             </h2>
-
             <div className="space-y-4">
               <SettingsNotificationItem
                 icon={Mail}
@@ -63,7 +66,6 @@ export default function Settings() {
                 checked={email}
                 onChange={setEmail}
               />
-
               <SettingsNotificationItem
                 icon={Bell}
                 title="Push Notifications"
@@ -75,12 +77,11 @@ export default function Settings() {
           </section>
 
           {/* Digest Frequency */}
-          <section className="mb-12">
-            <h2 className="mb-5 text-2xl font-semibold tracking-tight">
+          <section className="mb-10">
+            <h2 className="mb-5 text-xl font-semibold tracking-tight sm:text-2xl">
               Digest Frequency
             </h2>
-
-            <div className="grid max-w-3xl grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <SettingsFrequencyCard
                 icon={Calendar}
                 title="Daily"
@@ -88,7 +89,6 @@ export default function Settings() {
                 active={freq === "daily"}
                 onClick={() => setFreq("daily")}
               />
-
               <SettingsFrequencyCard
                 icon={CalendarDays}
                 title="Weekly"
@@ -96,7 +96,6 @@ export default function Settings() {
                 active={freq === "weekly"}
                 onClick={() => setFreq("weekly")}
               />
-
               <SettingsFrequencyCard
                 icon={CalendarRange}
                 title="Monthly"
@@ -106,8 +105,8 @@ export default function Settings() {
             </div>
           </section>
 
-          {/* Actions */}
-          <div className="flex justify-end gap-4">
+          {/* Action Buttons */}
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <Button variant="ghost" className="text-muted-foreground">
               Discard Changes
             </Button>
@@ -116,8 +115,7 @@ export default function Settings() {
             </Button>
           </div>
 
-          <Separator className="my-12" />
-
+          <Separator className="my-8" />
           <SettingsFooter />
         </div>
       </div>
