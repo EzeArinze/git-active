@@ -9,6 +9,10 @@ export const authClient = createAuthClient({
       }
     },
   },
+  sessionOptions: {
+    refetchOnWindowFocus: false,
+    refetchInterval: 30 * 60 * 1000,
+  },
 })
 
 export const {

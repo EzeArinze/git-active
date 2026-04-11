@@ -16,6 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { authSessionType } from "@/lib/client/use-auth"
 import {
   ChevronsUpDownIcon,
   BadgeCheckIcon,
@@ -24,12 +25,7 @@ import {
 } from "lucide-react"
 
 interface iAppProps {
-  user: {
-    name: string
-    email: string
-    initials: string
-    image: string | null | undefined
-  }
+  user: authSessionType["user"]
   signOut?: () => void
 }
 

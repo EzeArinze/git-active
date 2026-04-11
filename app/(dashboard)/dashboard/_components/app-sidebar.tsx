@@ -13,15 +13,14 @@ import {
 import {
   TerminalSquareIcon,
   Settings2Icon,
-  LifeBuoyIcon,
-  SendIcon,
   LayoutDashboard,
 } from "lucide-react"
 import Logo from "@/components/logo"
-import { useAuth } from "@/lib/client/use-auth"
+import { authSession } from "@/lib/client/use-auth"
 import { NavMain } from "./nav-main"
-import { NavSecondary } from "./nav-secondary"
+// import { NavSecondary } from "./nav-secondary"
 import { NavUser } from "./nav-user"
+import { IconNotification } from "@tabler/icons-react"
 
 const data = {
   user: {
@@ -53,27 +52,21 @@ const data = {
       ],
     },
     {
+      title: "Notifications",
+      url: "/dashboard/notifications",
+      icon: <IconNotification />,
+    },
+    {
       title: "Settings",
       url: "/dashboard/settings",
       icon: <Settings2Icon />,
     },
   ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: <LifeBuoyIcon />,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: <SendIcon />,
-    },
-  ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user, isLoading, signOut } = useAuth()
+  const { user, isPending, signOut } = authSession()
+
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -102,10 +95,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/*<NavSecondary items={data.navSecondary} className="mt-auto" />*/}
       </SidebarContent>
       <SidebarFooter>
-        {user && !isLoading ? <NavUser user={user} signOut={signOut} /> : null}
+        <NavUser user={user} signOut={signOut} />
       </SidebarFooter>
     </Sidebar>
   )
