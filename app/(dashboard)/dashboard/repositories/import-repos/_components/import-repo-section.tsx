@@ -3,48 +3,11 @@
 import { useState } from "react"
 import ImportRepoCard from "./import-repo-card"
 import { getUserReposType } from "@/modules/github/actions/get-user-repos"
-
-// Static GitHub repo data (no 'checked' field)
-// const reposFromGitHub = [
-//   {
-//     name: "nebula-core-engine",
-//     visibility: "PUBLIC",
-//     lastCommit: "Last commit: 2 hours ago",
-//     lang: "TypeScript",
-//     size: "1.2MB",
-//   },
-//   {
-//     name: "sahara-ui-framework",
-//     visibility: "PRIVATE",
-//     lastCommit: "Last commit: Yesterday",
-//     lang: "JavaScript",
-//     size: "456KB",
-//   },
-//   {
-//     name: "legacy-data-migrations",
-//     visibility: "PRIVATE",
-//     lastCommit: "Last commit: 3 days ago",
-//     lang: "Python",
-//     size: "8.4MB",
-//   },
-//   {
-//     name: "documentation-portal",
-//     visibility: "PUBLIC",
-//     lastCommit: "Last commit: 1 week ago",
-//     lang: "Markdown",
-//     size: "124KB",
-//   },
-//   {
-//     name: "mobile-app-flutter",
-//     visibility: "PRIVATE",
-//     lastCommit: "Last commit: 2 weeks ago",
-//     lang: "Dart",
-//     size: "15.2MB",
-//   },
-// ]
+import { Loader2, Search } from "lucide-react"
 
 function ImportRepoSection({ repos }: { repos: getUserReposType }) {
   const [selectedNames, setSelectedNames] = useState<Set<string>>(new Set())
+  const [query, setQuery] = useState("")
 
   const toggleRepo = (name: string) => {
     setSelectedNames((prev) => {
@@ -68,6 +31,8 @@ function ImportRepoSection({ repos }: { repos: getUserReposType }) {
 
   const selectedCount = selectedNames.size
 
+  const isPending = false
+
   return (
     <div className="rounded-xl border bg-background">
       <div className="flex items-center justify-between border-b p-4">
@@ -82,6 +47,28 @@ function ImportRepoSection({ repos }: { repos: getUserReposType }) {
             {selectedCount === repos.length ? "Deselect All" : "Select All"}
           </button>
         </div>
+      </div>
+
+      <div className="border-b p-3">
+        <div className="relative flex items-center">
+          {isPending ? (
+            <Loader2 className="absolute left-3 h-4 w-4 animate-spin text-muted-foreground" />
+          ) : (
+            <Search className="absolute left-3 h-4 w-4 text-muted-foreground" />
+          )}
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search repositories..."
+            className="w-full rounded-md border bg-transparent py-2 pr-4 pl-9 text-sm outline-none focus:ring-2 focus:ring-orange-500/50"
+          />
+        </div>
+        {/*{query && !isPending && searchResults?.length === 0 && (
+          <p className="mt-2 text-xs text-muted-foreground">
+            No repositories found for &quot;{query}&quot;
+          </p>
+        )}*/}
       </div>
 
       <div className="divide-y">

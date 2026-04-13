@@ -4,22 +4,41 @@ import ImportRepoSection from "./_components/import-repo-section"
 import InformationComponent from "./_components/information"
 import { getUserRepos } from "@/modules/github/actions/get-user-repos"
 
+// async function ImportReposRoute() {
+//   const session = await requireAuth()
+
+//   const repos = await getUserRepos(session.user.id)
+
+//   return (
+//     <div className="flex flex-1 flex-col gap-8 p-6">
+//       <ImportRepoHeader />
+
+//       {/* Repo Card */}
+//       <ImportRepoSection repos={repos} />
+
+//       {/* Bottom Features */}
+//       <InformationComponent />
+
+//       {/* Footer note */}
+//       <div className="text-center text-xs text-muted-foreground">
+//         Git Active © 2024 • BUILT FOR CLARITY
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default ImportReposRoute
+
+// app/.../import-repos/page.tsx
 async function ImportReposRoute() {
   const session = await requireAuth()
-
-  const repos = await getUserRepos(session.user.id)
+  const { repos } = await getUserRepos(session.user.id)
 
   return (
     <div className="flex flex-1 flex-col gap-8 p-6">
       <ImportRepoHeader />
-
-      {/* Repo Card */}
       <ImportRepoSection repos={repos} />
-
-      {/* Bottom Features */}
       <InformationComponent />
-
-      {/* Footer note */}
       <div className="text-center text-xs text-muted-foreground">
         Git Active © 2024 • BUILT FOR CLARITY
       </div>
