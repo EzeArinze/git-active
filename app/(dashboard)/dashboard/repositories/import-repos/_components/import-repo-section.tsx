@@ -5,7 +5,7 @@ import ImportRepoCard from "./import-repo-card"
 import { getUserReposType } from "@/modules/github/actions/get-user-repos"
 import { Loader2, Search } from "lucide-react"
 
-function ImportRepoSection({ repos }: { repos: getUserReposType }) {
+function ImportRepoSection({ repos }: getUserReposType) {
   const [selectedNames, setSelectedNames] = useState<Set<string>>(new Set())
   const [query, setQuery] = useState("")
 
