@@ -1,28 +1,30 @@
+"use client"
+
+import { Checkbox } from "@/components/ui/checkbox"
+
 interface iAppProps {
   repo: {
-    checked: boolean
     name: string
     visibility: string
     lastCommit: string
     lang: string
     size: string
   }
+  isSelected: boolean
+  onToggle: () => void
 }
 
-function ImportRepoCard({ repo }: iAppProps) {
+function ImportRepoCard({ repo, isSelected, onToggle }: iAppProps) {
   return (
     <div className="flex items-center justify-between p-4">
-      {/* Left */}
       <div className="flex items-center gap-4">
-        <input
-          type="checkbox"
-          defaultChecked={repo.checked}
-          className="h-4 w-4 accent-orange-500"
+        <Checkbox
+          checked={isSelected} // always a boolean, no undefined
+          onCheckedChange={onToggle}
+          className="h-4 w-4 data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500"
         />
-
         <div>
           <p className="font-medium">{repo.name}</p>
-
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <span
               className={`rounded px-2 py-0.5 text-[10px] font-medium ${
@@ -33,13 +35,10 @@ function ImportRepoCard({ repo }: iAppProps) {
             >
               {repo.visibility}
             </span>
-
             <span>{repo.lastCommit}</span>
           </div>
         </div>
       </div>
-
-      {/* Right */}
       <div className="hidden gap-4 text-sm text-muted-foreground sm:flex">
         <span>{repo.lang}</span>
         <span>•</span>

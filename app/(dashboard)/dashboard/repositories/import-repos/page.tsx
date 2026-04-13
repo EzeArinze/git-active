@@ -1,14 +1,20 @@
+import { requireAuth } from "@/lib/server/auth-guard/require-auth"
 import ImportRepoHeader from "./_components/import-repo-header"
 import ImportRepoSection from "./_components/import-repo-section"
 import InformationComponent from "./_components/information"
+import { getUserRepos } from "@/modules/github/actions/get-user-repos"
 
-function ImportReposRoute() {
+async function ImportReposRoute() {
+  const session = await requireAuth()
+
+  const repos = await getUserRepos(session.user.id)
+
   return (
     <div className="flex flex-1 flex-col gap-8 p-6">
       <ImportRepoHeader />
 
       {/* Repo Card */}
-      <ImportRepoSection />
+      <ImportRepoSection repos={repos} />
 
       {/* Bottom Features */}
       <InformationComponent />
