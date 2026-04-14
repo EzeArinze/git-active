@@ -4,10 +4,16 @@ import { useState } from "react"
 import ImportRepoCard from "./import-repo-card"
 import { getUserReposType } from "@/modules/github/actions/get-user-repos"
 import { Loader2, Search } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+// import { useDebouncedCallback } from "@/hooks/use-debounce"
+import { useDebouncer } from "@tanstack/react-pacer"
 
 function ImportRepoSection({ repos }: getUserReposType) {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
   const [selectedNames, setSelectedNames] = useState<Set<string>>(new Set())
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState(searchParams.get("import_search") || "")
 
   const toggleRepo = (name: string) => {
     setSelectedNames((prev) => {
@@ -29,9 +35,28 @@ function ImportRepoSection({ repos }: getUserReposType) {
     }
   }
 
-  const selectedCount = selectedNames.size
+  const debouncedFn = useDebouncer(
+    (value: string) => {
+      const params = new URLSearchParams(window.location.search)
 
-  const isPending = false
+      if (value) {
+        params.set("import_search", value)
+      } else {
+        params.delete("import_search")
+      }
+
+      router.replace(`?${params.toString()}`)
+    },
+    { wait: 500 },
+    (state) => {
+      return {
+        isPending: state.isPending,
+      }
+    }
+  )
+
+  const isPending = debouncedFn.state.isPending
+  const selectedCount = selectedNames.size
 
   return (
     <div className="rounded-xl border bg-background">
@@ -59,16 +84,20 @@ function ImportRepoSection({ repos }: getUserReposType) {
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value
+              setQuery(value)
+              debouncedFn.maybeExecute(value)
+            }}
             placeholder="Search repositories..."
             className="w-full rounded-md border bg-transparent py-2 pr-4 pl-9 text-sm outline-none focus:ring-2 focus:ring-orange-500/50"
           />
         </div>
-        {/*{query && !isPending && searchResults?.length === 0 && (
+        {query && !isPending && repos?.length === 0 && (
           <p className="mt-2 text-xs text-muted-foreground">
             No repositories found for &quot;{query}&quot;
           </p>
-        )}*/}
+        )}
       </div>
 
       <div className="divide-y">
@@ -76,7 +105,7 @@ function ImportRepoSection({ repos }: getUserReposType) {
           <ImportRepoCard
             key={repo.name}
             repo={repo}
-            isSelected={selectedNames.has(repo.name)} // always boolean
+            isSelected={selectedNames.has(repo.name)}
             onToggle={() => toggleRepo(repo.name)}
           />
         ))}
