@@ -17,8 +17,10 @@ export async function getUserRepos(userId: string, query: string) {
 
     return {
       repos: data.items.map((repo) => ({
+        id: repo.id,
         name: repo.name,
         full_name: repo.full_name,
+        owner: repo.owner?.name,
         visibility: repo.private ? "PRIVATE" : "PUBLIC",
         lastCommit: formatLastCommit(repo.pushed_at),
         lang: repo.language || "Unknown",
@@ -36,8 +38,10 @@ export async function getUserRepos(userId: string, query: string) {
 
   return {
     repos: repos.data.map((repo) => ({
+      id: repo.id,
       name: repo.name,
       full_name: repo.full_name,
+      owner: repo.owner.name,
       visibility: repo.private ? "PRIVATE" : "PUBLIC",
       lastCommit: formatLastCommit(repo.pushed_at),
       lang: repo.language || "Unknown",
