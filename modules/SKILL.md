@@ -6,10 +6,10 @@ Enable users to select a repository from fetched GitHub repos and import it into
 
 This flow MUST be:
 
-* secure (never trust client data)
-* idempotent (no duplicates)
-* scalable (supports orgs & many repos)
-* aligned with GitHub App + OAuth hybrid model
+- secure (never trust client data)
+- idempotent (no duplicates)
+- scalable (supports orgs & many repos)
+- aligned with GitHub App + OAuth hybrid model
 
 ---
 
@@ -19,16 +19,16 @@ This flow MUST be:
 
 ### 1. OAuth Layer (Discovery)
 
-* Fetch user repos (already implemented)
+- Fetch user repos (already implemented)
 
 ### 2. GitHub App Layer (Authorization)
 
-* Verify installation
-* Verify repo access
+- Verify installation
+- Verify repo access
 
 ### 3. App Layer (Database)
 
-* Store only **selected repos to monitor**
+- Store only **selected repos to monitor**
 
 ---
 
@@ -113,7 +113,7 @@ const githubRepo = await octokitUser.rest.repos.get({
 ## Step 2: Check if Already Imported
 
 ```ts
-const existing = await db.repositories.findFirst({
+const existing = await db.query.repositories.findFirst({
   where: {
     githubRepoId: githubRepo.data.id,
     userId,
@@ -206,10 +206,10 @@ await triggerInitialSync({
 
 This should:
 
-* fetch commits
-* fetch PRs
-* calculate metrics
-* generate initial alerts
+- fetch commits
+- fetch PRs
+- calculate metrics
+- generate initial alerts
 
 ---
 
@@ -365,7 +365,7 @@ Start monitoring & alerts
 
 This implementation is:
 
-* secure (no client trust)
-* scalable (org + multi-repo)
-* production-grade (transactions + constraints)
-* aligned with real SaaS architecture
+- secure (no client trust)
+- scalable (org + multi-repo)
+- production-grade (transactions + constraints)
+- aligned with real SaaS architecture
