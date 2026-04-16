@@ -15,11 +15,6 @@ export const auth = betterAuth({
       scope: ["repo", "read:user", "user:email"],
     },
   },
-  account: {
-    accountLinking: {
-      enabled: true,
-    },
-  },
   rateLimit: {
     enabled: true,
     window: 10 * 60,
@@ -31,5 +26,6 @@ export const auth = betterAuth({
       maxAge: 15 * 60,
     },
   },
+  trustedOrigins: [env.ORIGIN || "http://localhost:3000"],
   plugins: [nextCookies()],
 })

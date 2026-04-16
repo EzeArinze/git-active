@@ -11,32 +11,36 @@ type auth_provider = "github" | "google"
 
 function Login() {
   const [loggingIn, startLoggingIn] = useTransition()
-  const [isSigning,setIsSigning] = useState(false)
+  const [isSigning, setIsSigning] = useState(false)
 
   function handleLogin(method: auth_provider) {
     startLoggingIn(async () => {
-      authClient.signIn.social({
-        provider: method,
-        callbackURL: "/dashboard",
-      },{
-        onRequest:()=>{
-          setIsSigning(true)
+      authClient.signIn.social(
+        {
+          provider: method,
+          callbackURL: "/dashboard",
+          newUserCallbackURL: "/dashboard/onboarding",
         },
-        onSuccess:()=>{
-          setIsSigning(false)
-        },
-        onError:({error})=>{
-          setIsSigning(false)
-          console.log(error.message)
+        {
+          onRequest: () => {
+            setIsSigning(true)
+          },
+          onSuccess: () => {
+            setIsSigning(false)
+          },
+          onError: ({ error }) => {
+            setIsSigning(false)
+            console.log(error.message)
+          },
         }
-      })
+      )
     })
   }
 
   return (
     <section className="flex flex-col items-center justify-center">
       <div className="mb-4 text-center">
-        <div className="flex justify-center mb-2">
+        <div className="mb-2 flex justify-center">
           <Logo />
         </div>
 
@@ -52,16 +56,20 @@ function Login() {
         <button
           disabled={loggingIn || isSigning}
           onClick={() => handleLogin("github")}
-          className="w-full rounded-md bg-primary px-4 py-3 text-primary-foreground transition hover:bg-primary/90 cursor-pointer"
+          className="w-full cursor-pointer rounded-md bg-primary px-4 py-3 text-primary-foreground transition hover:bg-primary/90"
         >
           {loggingIn || isSigning ? (
-            <div className="flex items-center justify-center gap-2 cursor-not-allowed px-4 py-1">
+            <div className="flex cursor-not-allowed items-center justify-center gap-2 px-4 py-1">
               <Loader className="size-4 animate-spin" />
               Signing in...
             </div>
           ) : (
             <div className="flex items-center justify-center gap-2 px-4 py-1">
-              <IconBrandGithub fill="currentColor" strokeWidth={0} className="size-5" />
+              <IconBrandGithub
+                fill="currentColor"
+                strokeWidth={0}
+                className="size-5"
+              />
               Continue with GitHub
             </div>
           )}
