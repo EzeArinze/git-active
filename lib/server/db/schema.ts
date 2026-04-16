@@ -9,33 +9,40 @@ import {
 } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 import { user } from "../db/auth-schema"
+import { nanoid } from "nanoid"
 
 export * from "../db/auth-schema"
 
 export const githubInstallations = pgTable(
   "github_installations",
   {
-    id: text("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => nanoid()),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    installationId: integer("installation_id").notNull(),
+    installationId: integer("installation_id").notNull().unique(),
     accountLogin: text("account_login").notNull(),
+    accountType: text("account_type"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   },
   (table) => [
     index("github_installations_userId_idx").on(table.userId),
-    unique("github_installations_userId_installationId_unique").on(
-      table.userId,
-      table.installationId
-    ),
+    index("github_installations_installationId_idx").on(table.installationId),
   ]
 )
 
 export const repositories = pgTable(
   "repositories",
   {
-    id: text("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => nanoid()),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
@@ -66,7 +73,9 @@ export const repositories = pgTable(
 export const alerts = pgTable(
   "alerts",
   {
-    id: text("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => nanoid()),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
