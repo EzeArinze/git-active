@@ -53,7 +53,11 @@ export const repositories = pgTable(
     private: boolean("private").default(false).notNull(),
     url: text("url").notNull(),
     defaultBranch: text("default_branch").default("main").notNull(),
-    installationId: integer("installation_id").notNull(),
+    installationId: integer("installation_id")
+      .notNull()
+      .references(() => githubInstallations.installationId, {
+        onDelete: "cascade",
+      }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()

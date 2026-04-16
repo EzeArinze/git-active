@@ -11,26 +11,26 @@ function ImportRepoSection({ repos }: getUserReposType) {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const [selectedNames, setSelectedNames] = useState<Set<string>>(new Set())
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
   const [query, setQuery] = useState(searchParams.get("import_search") || "")
 
-  const toggleRepo = (name: string) => {
-    setSelectedNames((prev) => {
+  const toggleRepo = (id: number) => {
+    setSelectedIds((prev) => {
       const newSet = new Set(prev)
-      if (newSet.has(name)) {
-        newSet.delete(name)
+      if (newSet.has(id)) {
+        newSet.delete(id)
       } else {
-        newSet.add(name)
+        newSet.add(id)
       }
       return newSet
     })
   }
 
   const selectAll = () => {
-    if (selectedNames.size === repos.length) {
-      setSelectedNames(new Set())
+    if (selectedIds.size === repos.length) {
+      setSelectedIds(new Set())
     } else {
-      setSelectedNames(new Set(repos.map((repo) => repo.name)))
+      setSelectedIds(new Set(repos.map((repo) => repo.id)))
     }
   }
 
@@ -55,7 +55,7 @@ function ImportRepoSection({ repos }: getUserReposType) {
   )
 
   const isPending = debouncedFn.state.isPending
-  const selectedCount = selectedNames.size
+  const selectedCount = selectedIds.size
 
   return (
     <div className="rounded-xl border bg-background">
@@ -102,10 +102,10 @@ function ImportRepoSection({ repos }: getUserReposType) {
       <div className="divide-y">
         {repos.map((repo) => (
           <ImportRepoCard
-            key={repo.name}
+            key={repo.id}
             repo={repo}
-            isSelected={selectedNames.has(repo.name)}
-            onToggle={() => toggleRepo(repo.name)}
+            isSelected={selectedIds.has(repo.id)}
+            onToggle={() => toggleRepo(repo.id)}
           />
         ))}
       </div>

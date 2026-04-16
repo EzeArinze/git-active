@@ -1,3 +1,5 @@
+"use server"
+
 import { formatLastCommit } from "@/utils/format-last-commit"
 import { getOctokitForUser } from "../github"
 import { formatSize } from "@/utils/format-repo-size"
