@@ -9,7 +9,7 @@ export default async function OnboardingRoutePage() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-semibold tracking-tight">
-            Welcome, <span className="text-orange-600/70">{user.name}</span>
+            Welcome, <span className="text-orange-600/80">{user.name}</span>
           </h2>
           <p className="text-sm text-muted-foreground">
             Let’s get your workspace connected and start analyzing your
