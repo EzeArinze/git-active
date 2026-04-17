@@ -6,6 +6,7 @@ import { getUserReposType } from "@/modules/github/actions/get-user-repos"
 import { Loader2, Search } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useDebouncer } from "@tanstack/react-pacer"
+import ImportRepoActionButton from "./import-repo-action-button"
 
 function ImportRepoSection({ repos }: getUserReposType) {
   const searchParams = useSearchParams()
@@ -110,19 +111,10 @@ function ImportRepoSection({ repos }: getUserReposType) {
         ))}
       </div>
 
-      <div className="flex flex-col gap-4 border-t bg-accent-foreground/5 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-muted-foreground">
-          You can change these selections later in your settings.
-        </p>
-        <div className="flex gap-3">
-          <button className="rounded-md border px-4 py-2 text-sm">
-            Cancel
-          </button>
-          <button className="rounded-md bg-orange-500 px-4 py-2 text-sm text-white">
-            Import Selected ({selectedCount}) Repositories
-          </button>
-        </div>
-      </div>
+      <ImportRepoActionButton
+        selectedCount={selectedCount}
+        selectedIds={selectedIds}
+      />
     </div>
   )
 }

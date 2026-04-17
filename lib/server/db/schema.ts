@@ -73,6 +73,18 @@ export const repositories = pgTable(
   ]
 )
 
+export const activities = pgTable("activities", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  githubRepoId: integer("github_repo_id").notNull(),
+  type: text("type").notNull(), // push | pull_request | issue
+  actor: text("actor").notNull(),
+  message: text("message"),
+  url: text("url"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
 // Alerts Table (for future use)
 export const alerts = pgTable(
   "alerts",
