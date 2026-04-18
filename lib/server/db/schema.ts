@@ -7,7 +7,7 @@ import {
   index,
   unique,
 } from "drizzle-orm/pg-core"
-import { relations } from "drizzle-orm"
+import { InferSelectModel, relations } from "drizzle-orm"
 import { user } from "../db/auth-schema"
 import { nanoid } from "nanoid"
 
@@ -73,17 +73,22 @@ export const repositories = pgTable(
   ]
 )
 
-export const activities = pgTable("activities", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => nanoid()),
-  githubRepoId: integer("github_repo_id").notNull(),
-  type: text("type").notNull(), // push | pull_request | issue
-  actor: text("actor").notNull(),
-  message: text("message"),
-  url: text("url"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-})
+export const activities = pgTable(
+  "activities",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => nanoid()),
+    githubRepoId: integer("github_repo_id").notNull(),
+    externalId: text("external_id").notNull(),
+    type: text("type").notNull(),
+    actor: text("actor").notNull(),
+    message: text("message"),
+    url: text("url"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [unique("activities_external_id_unique").on(table.externalId)]
+)
 
 // Alerts Table (for future use)
 export const alerts = pgTable(
@@ -117,8 +122,16 @@ export const repositoriesRelations = relations(
       references: [user.id],
     }),
     alerts: many(alerts),
+    activities: many(activities),
   })
 )
+
+export const activitiesRelations = relations(activities, ({ one }) => ({
+  repository: one(repositories, {
+    fields: [activities.githubRepoId],
+    references: [repositories.githubRepoId],
+  }),
+}))
 
 export const alertsRelations = relations(alerts, ({ one }) => ({
   user: one(user, {
@@ -140,3 +153,5 @@ export const githubInstallationsRelations = relations(
     }),
   })
 )
+
+export type DBActivity = InferSelectModel<typeof activities>
