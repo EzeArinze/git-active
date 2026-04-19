@@ -44,7 +44,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
   const recentActivities = await db.query.activities.findMany({
     where: inArray(activities.githubRepoId, repoIds),
     orderBy: desc(activities.eventCreatedAt),
-    limit: 10,
+    limit: 50,
   })
 
   // 🔥 3. Group by repo
@@ -98,19 +98,28 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
     insights.push({
       id: "high-activity",
       title: "High commit activity detected",
+      repoName: repoGroups.map((repo) => repo.repoName),
       description: `${commitsToday} commits today across repositories`,
       severity: "info",
     })
   }
 
-  const inactiveRepos = repoGroups.filter(
-    (repo) => repo.activities.length === 0
-  )
+  const THIRTY_DAYS_AGO = new Date()
+  THIRTY_DAYS_AGO.setDate(THIRTY_DAYS_AGO.getDate() - 30)
+
+  const inactiveRepos = repoGroups.filter((repo) => {
+    if (repo.activities.length === 0) return true
+
+    const latestActivity = repo.activities[0]
+
+    return new Date(latestActivity.eventCreatedAt) < THIRTY_DAYS_AGO
+  })
 
   if (inactiveRepos.length > 0) {
     insights.push({
       id: "inactive-repos",
       title: "Inactive repositories detected",
+      repoName: inactiveRepos.map((repo) => repo.repoName),
       description: `${inactiveRepos.length} repos have no recent activity`,
       severity: "warning",
     })

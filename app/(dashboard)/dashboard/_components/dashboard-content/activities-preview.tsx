@@ -1,15 +1,12 @@
+import { Insight } from "@/types/dashboard"
+
 type Props = {
   stats: {
     commitsToday: number
     openPRs: number
     activeContributors: number
   }
-  insights: {
-    id: string
-    title: string
-    description: string
-    severity?: "info" | "warning" | "critical"
-  }[]
+  insights: Insight[]
 }
 
 function ActivitiesPreview({ stats, insights }: Props) {
@@ -32,6 +29,9 @@ function ActivitiesPreview({ stats, insights }: Props) {
                 <p className="font-medium">{insight.title}</p>
                 <span className="text-xs text-muted-foreground">
                   {insight.description}
+                </span>
+                <span className="pl-2 text-xs font-semibold text-orange-500/70">
+                  REPO-NAME: {insight.repoName.join(", ").toUpperCase()}
                 </span>
               </div>
             ))

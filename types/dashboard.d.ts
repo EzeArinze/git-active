@@ -11,6 +11,7 @@ export type InsightSeverity = "info" | "warning" | "critical"
 export type Insight = {
   id: string
   title: string
+  repoName: string[]
   description: string
   severity?: InsightSeverity
 }
