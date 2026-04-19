@@ -1,33 +1,33 @@
 import { DBActivity } from "@/lib/server/db/schema"
 
-export type RepoActivityGroup = {
+type RepoActivityGroup = {
   repoId: number
   repoName: string
   activities: DBActivity[]
 }
 
-export type InsightSeverity = "info" | "warning" | "critical"
+type InsightSeverity = "info" | "warning" | "critical"
 
-export type Insight = {
+type Insight = {
   id: string
   title: string
   description: string
   severity?: InsightSeverity
 }
 
-export type DashboardStats = {
+type DashboardStats = {
   commitsToday: number
   openPRs: number
   activeContributors: number
 }
 
-export type DashboardData = {
+type DashboardData = {
   repoGroups: RepoActivityGroup[]
   insights: Insight[]
   stats: DashboardStats
 }
 
-export type DashboardFilters = {
+type DashboardFilters = {
   repoIds?: number[]
   eventTypes?: string[]
   timeRange?: "24h" | "7d" | "30d" | "all"

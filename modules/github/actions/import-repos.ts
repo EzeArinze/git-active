@@ -5,6 +5,7 @@ import { repositories, githubInstallations } from "@/lib/server/db/schema"
 import { getServerSession } from "@/lib/server/auth-guard/session"
 import { eq } from "drizzle-orm"
 import { githubApp } from "../github-app-instance"
+import { backfillJob } from "@/modules/trigger/back-fill-repos"
 
 type ReturnType = {
   success: boolean
@@ -19,13 +20,15 @@ export async function importRepos(repoIds: number[]): Promise<ReturnType> {
 
   const session = await getServerSession()
 
-  if (!session?.user?.id) {
+  const userId = session?.user?.id
+
+  if (!userId) {
     throw new Error("Unauthorized")
   }
 
   // 1. Get installation for user
   const installation = await db.query.githubInstallations.findFirst({
-    where: eq(githubInstallations.userId, session.user.id),
+    where: eq(githubInstallations.userId, userId),
   })
 
   if (!installation) {
@@ -51,7 +54,7 @@ export async function importRepos(repoIds: number[]): Promise<ReturnType> {
 
   // 5. Prepare DB insert
   const values = selectedRepos.map((repo) => ({
-    userId: session.user.id,
+    userId: userId,
     installationId,
     githubRepoId: repo.id,
     name: repo.name,
@@ -72,6 +75,18 @@ export async function importRepos(repoIds: number[]): Promise<ReturnType> {
   if (result.length === 0) {
     throw new Error("No repositories imported")
   }
+
+  const reposForBackfill = result.map((repo) => ({
+    owner: repo.owner,
+    name: repo.name,
+    githubRepoId: repo.githubRepoId,
+  }))
+
+  await backfillJob.trigger({
+    installationId,
+    userId,
+    repos: reposForBackfill,
+  })
 
   return {
     success: true,

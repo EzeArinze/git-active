@@ -3,50 +3,56 @@
 import { db } from "@/lib/server/db"
 import { githubApp } from "../github-app-instance"
 import { activities } from "@/lib/server/db/schema"
+import pLimit from "p-limit"
+// import { revalidateTag } from "next/cache"
 
-type RepoInput = {
-  owner: string
-  name: string
-  githubRepoId: number
-}
+const limit = pLimit(3)
 
 export async function backfillRepos(
   installationId: number,
-  repos: RepoInput[]
+  userId: string,
+  repos: {
+    owner: string
+    name: string
+    githubRepoId: number
+  }[]
 ) {
-  if (!repos || repos.length === 0) return
-
   const octokit = await githubApp.getInstallationOctokit(installationId)
 
-  await Promise.all(
-    repos.map(async (repo) => {
+  const tasks = repos.map((repo) =>
+    limit(async () => {
       try {
-        // 🔥 COMMITS
-        const commitsRes = await octokit.rest.repos.listCommits({
-          owner: repo.owner,
-          repo: repo.name,
-          per_page: 5,
-        })
+        // 🔥 Parallel fetch inside repo
+        const [commits, prs, issues] = await Promise.all([
+          octokit.rest.repos.listCommits({
+            owner: repo.owner,
+            repo: repo.name,
+            per_page: 2,
+          }),
+          octokit.rest.pulls.list({
+            owner: repo.owner,
+            repo: repo.name,
+            per_page: 2,
+            state: "all",
+          }),
+          octokit.rest.issues.listForRepo({
+            owner: repo.owner,
+            repo: repo.name,
+            per_page: 2,
+            state: "all",
+          }),
+        ])
 
-        const commitActivities = commitsRes.data.map((commit) => ({
+        const commitActivities = commits.data.map((commit) => ({
           githubRepoId: repo.githubRepoId,
           externalId: commit.sha,
           type: "push",
-          actor:
-            commit.author?.login || commit.commit.author?.name || "unknown",
+          actor: commit.commit.author?.name || "unknown",
           message: commit.commit.message,
           url: commit.html_url,
         }))
 
-        // 🔥 PRs
-        const prsRes = await octokit.rest.pulls.list({
-          owner: repo.owner,
-          repo: repo.name,
-          per_page: 5,
-          state: "all",
-        })
-
-        const prActivities = prsRes.data.map((pr) => ({
+        const prActivities = prs.data.map((pr) => ({
           githubRepoId: repo.githubRepoId,
           externalId: String(pr.id),
           type: "pull_request",
@@ -55,16 +61,8 @@ export async function backfillRepos(
           url: pr.html_url,
         }))
 
-        // 🔥 Issues
-        const issuesRes = await octokit.rest.issues.listForRepo({
-          owner: repo.owner,
-          repo: repo.name,
-          per_page: 5,
-          state: "all",
-        })
-
-        const issueActivities = issuesRes.data
-          .filter((i) => !i.pull_request) // exclude PRs
+        const issueActivities = issues.data
+          .filter((i) => !i.pull_request)
           .map((issue) => ({
             githubRepoId: repo.githubRepoId,
             externalId: String(issue.id),
@@ -80,12 +78,19 @@ export async function backfillRepos(
           ...issueActivities,
         ]
 
-        if (allActivities.length === 0) return
+        if (allActivities.length > 0) {
+          await db
+            .insert(activities)
+            .values(allActivities)
+            .onConflictDoNothing()
+        }
 
-        await db.insert(activities).values(allActivities).onConflictDoNothing()
+        // revalidateTag(`dashboard-${userId}`, { expire: 30000 })
       } catch (error) {
-        console.error(`Backfill failed for ${repo.owner}/${repo.name}`, error)
+        console.error(`Backfill failed for ${repo.name}`, error)
       }
     })
   )
+
+  await Promise.all(tasks)
 }

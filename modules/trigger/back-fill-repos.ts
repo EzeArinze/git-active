@@ -1,0 +1,23 @@
+import { backfillRepos } from "@/modules/github/sync/trigger-initial-sync"
+import { logger, task } from "@trigger.dev/sdk"
+
+export const backfillJob = task({
+  id: "backfill-repos",
+  retry: {
+    maxAttempts: 3,
+  },
+
+  run: async (payload: {
+    installationId: number
+    userId: string
+    repos: {
+      owner: string
+      name: string
+      githubRepoId: number
+    }[]
+  }) => {
+    logger.info("Backfill started", { repoCount: payload.repos.length })
+    await backfillRepos(payload.installationId, payload.userId, payload.repos)
+    logger.info("Backfill completed", { repoCount: payload.repos.length })
+  },
+})
