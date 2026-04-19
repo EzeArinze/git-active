@@ -85,6 +85,7 @@ export const activities = pgTable(
     actor: text("actor").notNull(),
     message: text("message"),
     url: text("url"),
+    eventCreatedAt: timestamp("event_created_at").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => [unique("activities_external_id_unique").on(table.externalId)]

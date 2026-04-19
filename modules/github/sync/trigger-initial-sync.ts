@@ -50,6 +50,7 @@ export async function backfillRepos(
           actor: commit.commit.author?.name || "unknown",
           message: commit.commit.message,
           url: commit.html_url,
+          eventCreatedAt: new Date(commit.commit.author?.date || ""),
         }))
 
         const prActivities = prs.data.map((pr) => ({
@@ -59,6 +60,7 @@ export async function backfillRepos(
           actor: pr.user?.login || "unknown",
           message: `PR: ${pr.title}`,
           url: pr.html_url,
+          eventCreatedAt: new Date(pr.created_at),
         }))
 
         const issueActivities = issues.data
@@ -70,6 +72,7 @@ export async function backfillRepos(
             actor: issue.user?.login || "unknown",
             message: `Issue: ${issue.title}`,
             url: issue.html_url,
+            eventCreatedAt: new Date(issue.created_at),
           }))
 
         const allActivities = [

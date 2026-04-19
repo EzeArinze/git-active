@@ -5,6 +5,7 @@ type BuildActivityParams = {
   message: string
   url?: string
   externalId: string
+  eventCreatedAt: Date
 }
 
 export function buildActivity(params: BuildActivityParams) {
@@ -15,5 +16,6 @@ export function buildActivity(params: BuildActivityParams) {
     message: params.message,
     url: params.url,
     externalId: params.externalId,
+    eventCreatedAt: params.eventCreatedAt,
   }
 }

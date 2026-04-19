@@ -18,6 +18,12 @@ export async function importRepos(repoIds: number[]): Promise<ReturnType> {
     throw new Error("No repositories selected")
   }
 
+  if (repoIds.length > 10) {
+    throw new Error(
+      "Too many repositories selected. Please select 10 or fewer repositories."
+    )
+  }
+
   const session = await getServerSession()
 
   const userId = session?.user?.id

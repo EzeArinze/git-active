@@ -24,6 +24,7 @@ if (!initialized) {
     message?: string
     url?: string
     externalId: string
+    eventCreatedAt: Date
   }) {
     await db
       .insert(activities)
@@ -34,6 +35,7 @@ if (!initialized) {
         message: data.message,
         url: data.url,
         externalId: data.externalId,
+        eventCreatedAt: data.eventCreatedAt,
       })
       .onConflictDoNothing()
   }
@@ -53,6 +55,7 @@ if (!initialized) {
         actor: getActorFromCommit(commit.author),
         message: commit.message,
         url: commit.url,
+        eventCreatedAt: new Date(commit.timestamp),
       })
     })
 
@@ -75,6 +78,7 @@ if (!initialized) {
       actor: getActor({ login: issue.user?.login, type: issue.user?.type }),
       message: `${payload.action} issue: ${issue.title}`,
       url: issue.html_url,
+      eventCreatedAt: new Date(issue.created_at),
     })
 
     await storeActivity(activity)
@@ -94,6 +98,7 @@ if (!initialized) {
       message: `${payload.action} PR: ${pr.title}`,
       url: pr.html_url,
       externalId: String(pr.id),
+      eventCreatedAt: new Date(pr.created_at),
     })
 
     await storeActivity(activity)
