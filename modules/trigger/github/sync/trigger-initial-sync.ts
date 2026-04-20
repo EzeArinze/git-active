@@ -4,7 +4,6 @@ import { db } from "@/lib/server/db"
 import { githubApp } from "../github-app-instance"
 import { activities } from "@/lib/server/db/schema"
 import pLimit from "p-limit"
-// import { revalidateTag } from "next/cache"
 
 const limit = pLimit(3)
 
@@ -27,18 +26,18 @@ export async function backfillRepos(
           octokit.rest.repos.listCommits({
             owner: repo.owner,
             repo: repo.name,
-            per_page: 2,
+            per_page: 5,
           }),
           octokit.rest.pulls.list({
             owner: repo.owner,
             repo: repo.name,
-            per_page: 2,
+            per_page: 5,
             state: "all",
           }),
           octokit.rest.issues.listForRepo({
             owner: repo.owner,
             repo: repo.name,
-            per_page: 2,
+            per_page: 5,
             state: "all",
           }),
         ])
@@ -88,7 +87,7 @@ export async function backfillRepos(
             .onConflictDoNothing()
         }
 
-        // revalidateTag(`dashboard-${userId}`, { expire: 30000 })
+        // revalidatePath("/dashboard")
       } catch (error) {
         console.error(`Backfill failed for ${repo.name}`, error)
       }

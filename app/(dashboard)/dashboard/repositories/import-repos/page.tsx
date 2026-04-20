@@ -3,8 +3,8 @@ import ImportRepoSection from "./_components/import-repo-section"
 import InformationComponent from "./_components/information"
 import ImportRepoFooter from "./_components/import-repo-footer"
 import { requireAuth } from "@/lib/server/auth-guard/require-auth"
-import { getUserRepos } from "@/modules/github/actions/get-user-repos"
 import { Suspense } from "react"
+import { getUserRepos } from "@/modules/trigger/github/actions/get-user-repos"
 
 type SearchParams = {
   searchParams: Promise<{

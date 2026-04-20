@@ -18,9 +18,9 @@ export async function importRepos(repoIds: number[]): Promise<ReturnType> {
     throw new Error("No repositories selected")
   }
 
-  if (repoIds.length > 10) {
+  if (repoIds.length > 2) {
     throw new Error(
-      "Too many repositories selected. Please select 10 or fewer repositories."
+      "You can only import two at a time for now. Please select 2 or fewer repositories."
     )
   }
 

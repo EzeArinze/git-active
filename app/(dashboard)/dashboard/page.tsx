@@ -19,7 +19,6 @@ export default async function DashboardRoutePage() {
     redirect("/dashboard/repositories/import-repos")
   }
 
-  // 🔥 FETCH DASHBOARD DATA
   const data = await getDashboardData(session.user.id)
 
   return (
