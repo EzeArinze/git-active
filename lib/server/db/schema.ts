@@ -58,6 +58,7 @@ export const repositories = pgTable(
       .references(() => githubInstallations.installationId, {
         onDelete: "cascade",
       }),
+    // status: text("status").default("idle").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
