@@ -4,7 +4,7 @@ import InformationComponent from "./_components/information"
 import ImportRepoFooter from "./_components/import-repo-footer"
 import { requireAuth } from "@/lib/server/auth-guard/require-auth"
 import { Suspense } from "react"
-import { getUserRepos } from "@/modules/trigger/github/actions/get-user-repos"
+import { getUserRepos } from "@/modules/data/get-user-repos"
 
 type SearchParams = {
   searchParams: Promise<{
@@ -16,7 +16,6 @@ async function ImportReposRoute({ searchParams }: SearchParams) {
   const session = await requireAuth()
 
   const import_search = (await searchParams).import_search ?? ""
-  // const { repos } = await getUserRepos(session.user.id, import_search)
 
   return (
     <div className="flex flex-1 flex-col gap-8 p-6">

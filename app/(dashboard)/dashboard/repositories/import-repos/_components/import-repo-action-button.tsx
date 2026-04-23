@@ -1,5 +1,6 @@
 "use client"
-import { importRepos } from "@/modules/trigger/github/actions/import-repos"
+
+import { importRepos } from "@/modules/github/actions/import-repos"
 import { tryCatch } from "@/utils/try-catch"
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
