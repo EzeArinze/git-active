@@ -15,7 +15,7 @@ function ReposPageRoute() {
       <div className="flex flex-col gap-3 border-t pt-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <span>● System Status: Optimal</span>
-          <span>14.2 GB Used</span>
+          {/* <span>14.2 GB Used</span> */}
         </div>
 
         <div className="flex gap-4">

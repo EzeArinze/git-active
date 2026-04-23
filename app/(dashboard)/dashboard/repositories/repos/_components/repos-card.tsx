@@ -19,7 +19,9 @@ function ReposCard({ repo }: Props) {
       {/* Name */}
       <div className="mt-4">
         <h3 className="text-lg font-medium">{repo.name}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{repo.fullName}</p>
+        <p className="mt-1 text-sm text-orange-500/50 hover:underline dark:text-orange-300/60">
+          {repo.fullName}
+        </p>
       </div>
 
       {/* Footer */}

@@ -13,7 +13,7 @@ export async function getUserRepos(userId: string, query: string) {
   if (query) {
     const { data } = await octokit.rest.search.repos({
       q: `${query} user:${login} fork:true`,
-      per_page: 10,
+      per_page: 6,
       sort: "updated",
     })
 
@@ -32,7 +32,7 @@ export async function getUserRepos(userId: string, query: string) {
   }
 
   const repos = await octokit.rest.repos.listForAuthenticatedUser({
-    per_page: 10,
+    per_page: 6,
     page: 1,
     sort: "updated",
     visibility: "all",
