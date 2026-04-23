@@ -31,16 +31,16 @@ function ReposPageRoute() {
 async function Repos() {
   const repositories = await getImportedRepos()
 
-  if (repositories.length === 0) {
-    return <EmptyRepo />
-  }
-
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {repositories.map((repo) => (
-        <ReposCard key={repo.id} repo={repo} />
-      ))}
-
+    <div className="flex flex-col gap-6">
+      {repositories.length === 0 && <EmptyRepo />}
+      {repositories.length > 0 && (
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {repositories.map((repo) => (
+            <ReposCard key={repo.id} repo={repo} />
+          ))}
+        </div>
+      )}
       <PromoCard />
     </div>
   )

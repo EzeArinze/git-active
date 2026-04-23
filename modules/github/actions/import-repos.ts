@@ -6,6 +6,8 @@ import { getServerSession } from "@/lib/server/auth-guard/session"
 import { eq } from "drizzle-orm"
 import { githubApp } from "../github-app-instance"
 import { backfillJob } from "@/modules/trigger/back-fill-repos"
+import { batch } from "@trigger.dev/sdk"
+import { revalidatePathTask } from "@/modules/trigger/revalidate-task"
 
 type ReturnType = {
   success: boolean
@@ -92,11 +94,17 @@ export async function importRepos(repoIds: number[]): Promise<ReturnType> {
     githubRepoId: repo.githubRepoId,
   }))
 
-  await backfillJob.trigger({
-    installationId,
-    userId,
-    repos: reposForBackfill,
-  })
+  await batch.triggerByTask([
+    {
+      task: backfillJob,
+      payload: {
+        installationId,
+        userId,
+        repos: reposForBackfill,
+      },
+    },
+    { task: revalidatePathTask, payload: { path: "/dashboard", type: "page" } },
+  ])
 
   return {
     success: true,

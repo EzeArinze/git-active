@@ -13,6 +13,7 @@ export const env = createEnv({
     GITHUB_APP_WEBHOOK_SECRET: z.string().min(1),
     GITHUB_APP_NAME: z.string().min(1),
     TRIGGER_SECRET_KEY: z.string().min(1),
+    REVALIDATION_SECRET: z.string().min(1),
   },
 
   experimental__runtimeEnv: process.env,
