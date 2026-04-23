@@ -35,6 +35,10 @@ export async function importRepos(repoIds: number[]): Promise<ReturnType> {
   // 1. Get installation for user
   const installation = await db.query.githubInstallations.findFirst({
     where: eq(githubInstallations.userId, userId),
+    columns: {
+      id: true,
+      installationId: true,
+    },
   })
 
   if (!installation) {

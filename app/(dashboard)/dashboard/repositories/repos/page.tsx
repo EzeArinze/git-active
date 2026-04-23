@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import Repos from "./_components/repos"
 import ReposPageHeader from "./_components/repos-page-header"
 
@@ -5,8 +6,9 @@ function ReposPageRoute() {
   return (
     <div className="flex flex-1 flex-col gap-8 p-6">
       <ReposPageHeader />
-
-      <Repos />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Repos />
+      </Suspense>
 
       <div className="flex flex-col gap-3 border-t pt-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">

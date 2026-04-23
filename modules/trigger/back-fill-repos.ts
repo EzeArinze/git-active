@@ -1,5 +1,5 @@
 import { logger, task } from "@trigger.dev/sdk"
-import { backfillRepos } from "./github/sync/trigger-initial-sync"
+import { backfillRepos } from "../github/sync/trigger-initial-sync"
 
 export const backfillJob = task({
   id: "backfill-repos",

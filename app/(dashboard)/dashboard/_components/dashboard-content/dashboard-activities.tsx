@@ -1,6 +1,7 @@
 import { DBActivity } from "@/lib/server/db/schema"
 import { formatTimeAgo } from "@/utils/format-time-ago"
-import { ChevronDown } from "lucide-react"
+import ActivitiesFilter from "./activities-filter"
+import Link from "next/link"
 
 type RepoGroup = {
   repoId: number
@@ -18,24 +19,18 @@ function DashboardActivities({ repoGroups }: Props) {
       <div className="flex justify-between">
         <h2 className="text-lg font-semibold">Activity Feed</h2>
 
-        <div className="flex gap-4 text-sm text-muted-foreground">
-          <button className="flex items-center gap-1">
-            All Repositories <ChevronDown size={14} />
-          </button>
-          <button className="flex items-center gap-1">
-            All Events <ChevronDown size={14} />
-          </button>
-          <button className="flex items-center gap-1">
-            Last 24h <ChevronDown size={14} />
-          </button>
-        </div>
+        <ActivitiesFilter />
       </div>
 
       <div className="space-y-4">
         {repoGroups.map((repo) => (
           <div key={repo.repoId} className="rounded-xl border">
-            <div className="border-b p-4 text-sm font-medium">
+            <div className="flex items-center justify-between border-b p-4 text-sm font-medium">
               {repo.repoName.toUpperCase()}
+
+              <Link href={`/dashboard/repositories/repo/${repo.repoId}`}>
+                Details
+              </Link>
             </div>
 
             {repo.activities.length === 0 ? (

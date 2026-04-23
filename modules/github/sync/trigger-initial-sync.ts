@@ -86,8 +86,6 @@ export async function backfillRepos(
             .values(allActivities)
             .onConflictDoNothing()
         }
-
-        // revalidatePath("/dashboard")
       } catch (error) {
         console.error(`Backfill failed for ${repo.name}`, error)
       }
@@ -95,4 +93,5 @@ export async function backfillRepos(
   )
 
   await Promise.all(tasks)
+  // revalidatePath("/dashboard")
 }

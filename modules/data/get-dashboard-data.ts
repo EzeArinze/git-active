@@ -43,7 +43,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
   // 🔥 2. Fetch recent activities
   const recentActivities = await db.query.activities.findMany({
     where: inArray(activities.githubRepoId, repoIds),
-    orderBy: desc(activities.eventCreatedAt),
+    orderBy: desc(activities.createdAt),
     limit: 50,
   })
 
