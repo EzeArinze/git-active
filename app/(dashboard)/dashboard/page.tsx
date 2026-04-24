@@ -4,9 +4,22 @@ import ActivitiesPreview from "./_components/dashboard-content/activities-previe
 import { requireAuth } from "@/lib/server/auth-guard/require-auth"
 import { getUserGithubState } from "@/modules/data/getUserGithubState"
 import { getDashboardData } from "@/modules/data/get-dashboard-data"
+import DashboardSkeleton from "./_components/dashboard-content/dashboard-skeleton"
 import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
-export default async function DashboardRoutePage() {
+export default function DashboardRoutePage() {
+  return (
+    <div className="flex flex-1 flex-col gap-6 p-4 sm:p-6">
+      <DashboardHeader />
+      <Suspense fallback={<DashboardSkeleton />}>
+        <DashboardContent />
+      </Suspense>
+    </div>
+  )
+}
+
+async function DashboardContent() {
   const session = await requireAuth("/login")
 
   const state = await getUserGithubState(session.user.id)
@@ -22,12 +35,9 @@ export default async function DashboardRoutePage() {
   const data = await getDashboardData(session.user.id)
 
   return (
-    <div className="flex flex-1 flex-col gap-6 p-4 sm:p-6">
-      <DashboardHeader />
-
+    <>
       <ActivitiesPreview stats={data.stats} insights={data.insights} />
-
       <DashboardActivities repoGroups={data.repoGroups} />
-    </div>
+    </>
   )
 }

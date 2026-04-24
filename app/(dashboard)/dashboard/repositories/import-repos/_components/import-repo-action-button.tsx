@@ -39,13 +39,13 @@ function ImportRepoActionButton({
       <div className="flex gap-3">
         {/* <button className="rounded-md border px-4 py-2 text-sm">Cancel</button> */}
         <button
-          disabled={isImporting}
+          disabled={isImporting || selectedCount === 0}
           onClick={handleImport}
           className="rounded-md bg-orange-500 px-4 py-2 text-sm text-white"
         >
           {isImporting
             ? "Importing..."
-            : `Import Selected (${selectedCount}) Repositories`}
+            : `Import ${selectedCount ? selectedCount : ""} Repositories`}
         </button>
       </div>
     </div>

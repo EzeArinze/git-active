@@ -5,14 +5,18 @@ import PromoCard from "./_components/promo-card"
 import { getImportedRepos } from "@/modules/data/get-imported-repos"
 import EmptyRepo from "./_components/empty-repo"
 import { requireAuth } from "@/lib/server/auth-guard/require-auth"
+import ReposSkeleton from "./_components/repos-skeleton"
 
 function ReposPageRoute() {
   return (
     <div className="flex flex-1 flex-col gap-8 p-6">
       <ReposPageHeader />
-      <Suspense fallback={<div>Loading...</div>}>
-        <Repos />
-      </Suspense>
+      <div className="flex flex-col gap-6">
+        <Suspense fallback={<ReposSkeleton />}>
+          <Repos />
+        </Suspense>
+        <PromoCard />
+      </div>
       <div className="flex flex-col gap-3 border-t pt-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <span>● System Status: Optimal</span>
@@ -34,7 +38,7 @@ async function Repos() {
   const repositories = await getImportedRepos({ userId: session.user.id })
 
   return (
-    <div className="flex flex-col gap-6">
+    <>
       {repositories.length === 0 && <EmptyRepo />}
       {repositories.length > 0 && (
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -43,8 +47,7 @@ async function Repos() {
           ))}
         </div>
       )}
-      <PromoCard />
-    </div>
+    </>
   )
 }
 

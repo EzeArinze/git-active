@@ -12,7 +12,7 @@ export async function getUserRepos(
 ) {
   "use cache"
   cacheLife("minutes")
-  cacheTag(`github-repos-${userId}`, `github-repos-query-${query}`)
+  cacheTag(`github-repos-${userId}`)
 
   const octokit = await getOctokitForUser({ accessToken })
   const {

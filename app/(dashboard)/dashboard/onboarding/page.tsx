@@ -1,16 +1,20 @@
 import { requireAuth } from "@/lib/server/auth-guard/require-auth"
 import ConnectGithubActionButton from "./_components/connect-github-action-button"
 import { IconBrandGithub } from "@tabler/icons-react"
+import { Suspense } from "react"
 
-export default async function OnboardingRoutePage() {
-  const { user } = await requireAuth()
+export default function OnboardingRoutePage() {
   return (
     <section className="flex flex-1 flex-col gap-8 p-4 sm:p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Welcome, <span className="text-orange-600/80">{user.name}</span>
-          </h2>
+          <Suspense
+            fallback={
+              <div className="h-8 w-32 animate-pulse rounded bg-muted" />
+            }
+          >
+            <OnboardingUserName />
+          </Suspense>
           <p className="text-sm text-muted-foreground">
             Let’s get your workspace connected and start analyzing your
             repositories.
@@ -46,5 +50,15 @@ export default async function OnboardingRoutePage() {
         </div>
       </div>
     </section>
+  )
+}
+
+async function OnboardingUserName() {
+  const { user } = await requireAuth()
+
+  return (
+    <h2 className="text-2xl font-semibold tracking-tight">
+      Welcome, <span className="text-orange-600/80">{user.name}</span>
+    </h2>
   )
 }

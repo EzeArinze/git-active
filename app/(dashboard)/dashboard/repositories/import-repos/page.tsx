@@ -6,6 +6,7 @@ import { requireAuth } from "@/lib/server/auth-guard/require-auth"
 import { Suspense } from "react"
 import { getUserRepos } from "@/modules/data/get-user-repos"
 import { requireAccessToken } from "@/lib/server/auth-guard/access-token"
+import ImportRepoSearchBar from "./_components/import-search-components"
 
 type SearchParams = {
   searchParams: Promise<{
@@ -14,15 +15,14 @@ type SearchParams = {
 }
 
 async function ImportReposRoute({ searchParams }: SearchParams) {
-  const session = await requireAuth()
-
-  const import_search = (await searchParams).import_search ?? ""
-
   return (
     <div className="flex flex-1 flex-col gap-8 p-6">
       <ImportRepoHeader />
-      <Suspense fallback={<div>loading...</div>} key={import_search}>
-        <RepoFetchSection search={import_search} sessionId={session.user.id} />
+      <Suspense>
+        <ImportRepoSearchBar />
+      </Suspense>
+      <Suspense fallback={<div>loading...</div>}>
+        <RepoFetchSection searchParams={searchParams} />
       </Suspense>
       <InformationComponent />
       <ImportRepoFooter />
@@ -30,17 +30,28 @@ async function ImportReposRoute({ searchParams }: SearchParams) {
   )
 }
 
-async function RepoFetchSection({
-  sessionId,
-  search,
-}: {
-  sessionId: string
-  search: string
-}) {
-  const accessToken = await requireAccessToken({ userId: sessionId })
-  const { repos } = await getUserRepos(sessionId, search, accessToken)
+async function RepoFetchSection({ searchParams }: SearchParams) {
+  const session = await requireAuth()
+  const search = (await searchParams).import_search ?? ""
 
-  return <ImportRepoSection repos={repos} />
+  const accessToken = await requireAccessToken({ userId: session.user.id })
+  const { repos } = await getUserRepos(session.user.id, search, accessToken)
+
+  return (
+    <div className="rounded-xl border bg-background">
+      <div className="flex items-center justify-between border-b p-4">
+        <div className="flex items-center gap-2 text-sm font-medium">
+          📁 GITHUB REPOSITORIES
+        </div>
+        <div className="flex items-center gap-4 text-sm">
+          <span className="text-muted-foreground">
+            {repos.length} repositories found
+          </span>
+        </div>
+      </div>
+      <ImportRepoSection repos={repos} />
+    </div>
+  )
 }
 
 export default ImportReposRoute
