@@ -9,13 +9,13 @@ import {
   RepoActivityGroup,
 } from "@/types/dashboard"
 import { eq, inArray, desc } from "drizzle-orm"
-// import { cacheLife, cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 
 export async function getDashboardData(userId: string): Promise<DashboardData> {
-  // "use cache"
+  "use cache"
 
-  // cacheLife("minutes")
-  // cacheTag(`dashboard-${userId}`)
+  cacheLife("minutes")
+  cacheTag(`dashboard-${userId}`)
 
   // 1. Get user repos
   const userRepos = await db.query.repositories.findMany({

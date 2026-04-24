@@ -3,9 +3,18 @@
 import { formatLastCommit } from "@/utils/format-last-commit"
 import { getOctokitForUser } from "../github/github"
 import { formatSize } from "@/utils/format-repo-size"
+import { cacheLife, cacheTag } from "next/cache"
 
-export async function getUserRepos(userId: string, query: string) {
-  const octokit = await getOctokitForUser({ userId })
+export async function getUserRepos(
+  userId: string,
+  query: string,
+  accessToken: string
+) {
+  "use cache"
+  cacheLife("minutes")
+  cacheTag(`github-repos-${userId}`, `github-repos-query-${query}`)
+
+  const octokit = await getOctokitForUser({ accessToken })
   const {
     data: { login },
   } = await octokit.rest.users.getAuthenticated()

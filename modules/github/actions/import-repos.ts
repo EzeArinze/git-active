@@ -4,6 +4,7 @@ import { db } from "@/lib/server/db"
 import { repositories, githubInstallations } from "@/lib/server/db/schema"
 import { getServerSession } from "@/lib/server/auth-guard/session"
 import { eq } from "drizzle-orm"
+import { updateTag } from "next/cache"
 import { githubApp } from "../github-app-instance"
 import { backfillJob } from "@/modules/trigger/back-fill-repos"
 import { batch } from "@trigger.dev/sdk"
@@ -105,6 +106,9 @@ export async function importRepos(repoIds: number[]): Promise<ReturnType> {
     },
     { task: revalidatePathTask, payload: { path: "/dashboard", type: "page" } },
   ])
+
+  updateTag(`dashboard-${userId}`)
+  updateTag("imported-repos")
 
   return {
     success: true,

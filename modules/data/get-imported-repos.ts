@@ -2,18 +2,16 @@
 
 import { db } from "@/lib/server/db"
 import { repositories } from "@/lib/server/db/schema"
-import { getServerSession } from "@/lib/server/auth-guard/session"
 import { eq } from "drizzle-orm"
+import { cacheLife, cacheTag } from "next/cache"
 
-export async function getImportedRepos() {
-  const session = await getServerSession()
-
-  if (!session?.user?.id) {
-    throw new Error("Unauthorized")
-  }
+export async function getImportedRepos({ userId }: { userId: string }) {
+  "use cache"
+  cacheLife("minutes")
+  cacheTag(`imported-repos`)
 
   return await db.query.repositories.findMany({
-    where: eq(repositories.userId, session.user.id),
+    where: eq(repositories.userId, userId),
     columns: {
       id: true,
       name: true,

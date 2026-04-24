@@ -3,10 +3,14 @@
 import { db } from "@/lib/server/db"
 import { eq } from "drizzle-orm"
 import { githubInstallations, repositories } from "@/lib/server/db/schema"
+import { cacheLife, cacheTag } from "next/cache"
 
 const LIMIT = 1
 
 export async function getUserGithubState(userId: string) {
+  "use cache"
+  cacheLife("minutes")
+  cacheTag(`github-state-${userId}`)
   try {
     const [installationRecord, repos] = await Promise.all([
       db.query.githubInstallations.findFirst({

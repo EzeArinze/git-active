@@ -5,6 +5,7 @@ import ImportRepoFooter from "./_components/import-repo-footer"
 import { requireAuth } from "@/lib/server/auth-guard/require-auth"
 import { Suspense } from "react"
 import { getUserRepos } from "@/modules/data/get-user-repos"
+import { requireAccessToken } from "@/lib/server/auth-guard/access-token"
 
 type SearchParams = {
   searchParams: Promise<{
@@ -36,7 +37,8 @@ async function RepoFetchSection({
   sessionId: string
   search: string
 }) {
-  const { repos } = await getUserRepos(sessionId, search)
+  const accessToken = await requireAccessToken({ userId: sessionId })
+  const { repos } = await getUserRepos(sessionId, search, accessToken)
 
   return <ImportRepoSection repos={repos} />
 }

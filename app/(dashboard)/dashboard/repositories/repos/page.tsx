@@ -4,6 +4,7 @@ import ReposCard from "./_components/repos-card"
 import PromoCard from "./_components/promo-card"
 import { getImportedRepos } from "@/modules/data/get-imported-repos"
 import EmptyRepo from "./_components/empty-repo"
+import { requireAuth } from "@/lib/server/auth-guard/require-auth"
 
 function ReposPageRoute() {
   return (
@@ -29,7 +30,8 @@ function ReposPageRoute() {
 }
 
 async function Repos() {
-  const repositories = await getImportedRepos()
+  const session = await requireAuth()
+  const repositories = await getImportedRepos({ userId: session.user.id })
 
   return (
     <div className="flex flex-col gap-6">

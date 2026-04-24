@@ -19,8 +19,8 @@ import {
 import { authSessionType } from "@/lib/client/use-auth"
 import {
   ChevronsUpDownIcon,
-  BadgeCheckIcon,
-  CreditCardIcon,
+  // BadgeCheckIcon,
+  // CreditCardIcon,
   LogOutIcon,
 } from "lucide-react"
 
@@ -76,7 +76,7 @@ export function NavUser({ user, signOut }: iAppProps) {
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            {/* <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheckIcon />
                 Account
@@ -85,7 +85,7 @@ export function NavUser({ user, signOut }: iAppProps) {
                 <CreditCardIcon />
                 Billing
               </DropdownMenuItem>
-            </DropdownMenuGroup>
+            </DropdownMenuGroup> */}
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={signOut}>

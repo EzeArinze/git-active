@@ -93,5 +93,4 @@ export async function backfillRepos(
   )
 
   await Promise.all(tasks)
-  // revalidatePath("/dashboard")
 }
