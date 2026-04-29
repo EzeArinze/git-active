@@ -3,6 +3,7 @@
 import { db } from "@/lib/server/db"
 import { githubApp } from "../github-app-instance"
 import { activities } from "@/lib/server/db/schema"
+import { updateTag } from "next/cache"
 import pLimit from "p-limit"
 
 const limit = pLimit(3)
@@ -16,6 +17,7 @@ export async function backfillRepos(
     githubRepoId: number
   }[]
 ) {
+  "use step"
   const octokit = await githubApp.getInstallationOctokit(installationId)
 
   const tasks = repos.map((repo) =>
@@ -86,6 +88,9 @@ export async function backfillRepos(
             .values(allActivities)
             .onConflictDoNothing()
         }
+
+        updateTag(`dashboard-${userId}`)
+        // updateTag("imported-repos")
       } catch (error) {
         console.error(`Backfill failed for ${repo.name}`, error)
       }

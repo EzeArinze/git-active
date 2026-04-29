@@ -16,7 +16,6 @@ export const backfillJob = task({
       githubRepoId: number
     }[]
   }) => {
-    logger.info("Backfill started", { repoCount: payload.repos.length })
     await backfillRepos(payload.installationId, payload.userId, payload.repos)
     logger.info("Backfill completed", { repoCount: payload.repos.length })
   },

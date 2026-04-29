@@ -6,9 +6,11 @@ import { getServerSession } from "@/lib/server/auth-guard/session"
 import { eq } from "drizzle-orm"
 import { updateTag } from "next/cache"
 import { githubApp } from "../github-app-instance"
-import { backfillJob } from "@/modules/trigger/back-fill-repos"
-import { batch } from "@trigger.dev/sdk"
-import { revalidatePathTask } from "@/modules/trigger/revalidate-task"
+// import { backfillJob } from "@/modules/trigger/back-fill-repos"
+// import { batch } from "@trigger.dev/sdk"
+// import { revalidatePathTask } from "@/modules/trigger/revalidate-task"
+import { backfillworkflow } from "@/modules/back-filling-workflow"
+import { start } from "workflow/api"
 
 type ReturnType = {
   success: boolean
@@ -95,20 +97,23 @@ export async function importRepos(repoIds: number[]): Promise<ReturnType> {
     githubRepoId: repo.githubRepoId,
   }))
 
-  await batch.triggerByTask([
-    {
-      task: backfillJob,
-      payload: {
-        installationId,
-        userId,
-        repos: reposForBackfill,
-      },
-    },
-    { task: revalidatePathTask, payload: { path: "/dashboard", type: "page" } },
+  // await batch.triggerByTask([
+  //   {
+  //     task: backfillJob,
+  //     payload: {
+  //       installationId,
+  //       userId,
+  //       repos: reposForBackfill,
+  //     },
+  //   },
+  //   { task: revalidatePathTask, payload: { path: "/dashboard", type: "page" } },
+  // ])
+
+  await start(backfillworkflow, [
+    { installationId, repos: reposForBackfill, userId },
   ])
 
   updateTag(`dashboard-${userId}`)
-  updateTag("imported-repos")
 
   return {
     success: true,
